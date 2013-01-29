@@ -115,20 +115,18 @@ module.exports = function (grunt) {
                 jsTestDriver = grunt.utils.spawn({
                     cmd: 'java',
                     args: jarFile.concat(jarOptions)
-                }, function (error, result, code) {
+                }, function (error) {
                     if (error) {
                         throwError(error.stderr);
                         onComplete(false);
-                    }
-                    else {
+                    } else {
                         onComplete();
                     }
                 });
 
                 jsTestDriver.stdout.pipe(process.stdout);
                 jsTestDriver.stderr.pipe(process.stderr);
-            }
-            else {
+            } else {
                 onComplete(false);
             }
         }
