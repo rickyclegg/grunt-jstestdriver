@@ -35,7 +35,7 @@ Example grunt.js
 
 ```javascript
 jstestdriver: {
-    browser: "/Applications/Safari.app/Contents/MacOS/firefox",
+    browser: "/Applications/Safari.app/Contents/MacOS/safari",
     port: "9876",
     preloadFiles: "true",
     tests: "all",
