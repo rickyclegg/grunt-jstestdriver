@@ -1,4 +1,4 @@
-# grunt-Plugins
+# grunt-jstestdriver
 
 CURRENTLY UNDER CONSTRUCTION
 
@@ -18,7 +18,7 @@ The gruntfile config options have three mandatory properties.
 
 ```javascript
 jstestdriver: {
-    browser: "/Applications/Firefox",
+    browser: "/Applications/Firefox.app/Contents/MacOS/firefox",
     port: "9876",
     tests: "all"
 }
@@ -35,7 +35,7 @@ Example grunt.js
 
 ```javascript
 jstestdriver: {
-    browser: "/Applications/Safari",
+    browser: "/Applications/Safari.app/Contents/MacOS/firefox",
     port: "9876",
     preloadFiles: "true",
     tests: "all",
