@@ -109,7 +109,9 @@ module.exports = function (grunt) {
             var prop, resultStr = "";
 
             for (prop in result) {
-                console.log(result[prop]);
+                if (result.hasOwnProperty(prop)) {
+                    console.log(result[prop]);
+                }
             }
 
             return false;
