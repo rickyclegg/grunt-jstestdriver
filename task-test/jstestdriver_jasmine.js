@@ -9,7 +9,7 @@ describe("JsTestDriver Jasmine numbers test", function () {
     it("Test multiplying numbers", function () {
         var total = 10 * 10 * 10;
 
-        expect(total).toBeDefined(1000);
+        expect(total).toBeDefined(1001);
     });
 
 });

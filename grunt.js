@@ -47,7 +47,7 @@ module.exports = function (grunt) {
         },
         shell: {
             git_commit: {
-                command: "git commit -a -m 'Commiting from grunt'",
+                command: "git commit -a -m 'Commiting from grunt when fail'",
                 stdout: true,
                 failOnError: true
             }
