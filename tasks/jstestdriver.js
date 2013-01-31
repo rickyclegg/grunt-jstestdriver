@@ -105,6 +105,12 @@ module.exports = function (grunt) {
             return evalOptionsData(arr) ? arr : null;
         }
 
+        function hasFailedTests(resultArray) {
+            console.log(typeof resultArray);
+
+            return false;
+        }
+
         function run(options, onComplete) {
             var jarFile = ["-jar", getPathToJar()],
                 jarOptions = getOptionsArray(options),
@@ -114,14 +120,11 @@ module.exports = function (grunt) {
                 jsTestDriver = grunt.utils.spawn({
                     cmd: 'java',
                     args: jarFile.concat(jarOptions)
-                }, function (error, arg1, arg2) {
-                    if (error) {
+                }, function (error, result) {
+                    if (error || hasFailedTests(result)) {
                         throwError(error.stderr);
                         onComplete(false);
                     } else {
-
-                        console.log(arg2);
-
                         onComplete();
                     }
                 });
