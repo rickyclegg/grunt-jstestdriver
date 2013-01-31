@@ -34,7 +34,6 @@ module.exports = function (grunt) {
 
         function evalOptionsExistance(arr, value, errMsg) {
             var valid = doesValueExistInArray(arr, OPTION_PROP_PREFIX + value);
-
             if (!valid) {
                 log(errMsg);
             }
