@@ -81,6 +81,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
+* 2012/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.
 * 2012/01/2 - v1.0.1 - Updated to Apache License.
 * 2012/01/2 - v1.0.0 - First release version.
 

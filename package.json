@@ -1,7 +1,7 @@
 {
   "name": "grunt-jstestdriver",
   "description": "Grunt task for uniting testing using JS Test Driver.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "homepage": "https://github.com/rickyclegg/grunt-jstestdriver",
   "author": {
     "name": "Ricky Clegg",
