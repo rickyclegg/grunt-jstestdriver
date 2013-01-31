@@ -114,9 +114,9 @@ module.exports = function (grunt) {
                 }
             }
 
-            console.log(resultStr.indexOf("Error") > -1);
+            console.log(resultStr);
 
-            return resultStr.indexOf("Error") > -1;
+            return resultStr.indexOf("Error:") > -1;
         }
 
         function run(options, onComplete) {
@@ -129,7 +129,7 @@ module.exports = function (grunt) {
                     cmd: 'java',
                     args: jarFile.concat(jarOptions)
                 }, function (error, result) {
-                    if (error || !hasFailedTests(result)) {
+                    if (error || hasFailedTests(result)) {
                         onComplete(false);
                     } else {
                         onComplete();
