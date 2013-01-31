@@ -44,13 +44,22 @@ module.exports = function (grunt) {
             plugins: null,
             basePath: null,
             runnerMode: null
+        },
+        shell: {
+            git_commit: {
+                command: "git commit -a -m 'Commiting from grunt'",
+                stdout: true,
+                failOnError: true
+            }
         }
     });
 
     // Load local tasks.
     grunt.loadTasks('tasks');
 
+    grunt.loadNpmTasks('grunt-shell');
+
     // Default task.
-    grunt.registerTask('default', 'lint jstestdriver');
+    grunt.registerTask('default', 'lint jstestdriver shell:git_commit');
 
 };
