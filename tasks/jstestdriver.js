@@ -119,6 +119,9 @@ module.exports = function (grunt) {
                         throwError(error.stderr);
                         onComplete(false);
                     } else {
+
+                        console.log(arguments);
+
                         onComplete();
                     }
                 });
