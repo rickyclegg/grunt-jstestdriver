@@ -105,8 +105,12 @@ module.exports = function (grunt) {
             return evalOptionsData(arr) ? arr : null;
         }
 
-        function hasFailedTests(resultArray) {
-            console.log(typeof resultArray);
+        function hasFailedTests(result) {
+            var prop, resultStr = "";
+
+            for (prop in result) {
+                console.log(result[prop]);
+            }
 
             return false;
         }
