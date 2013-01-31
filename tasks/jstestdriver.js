@@ -114,7 +114,7 @@ module.exports = function (grunt) {
                 }
             }
 
-            console.log(resultStr);
+            console.log(resultStr, resultStr.indexOf("Error") > -1);
 
             return resultStr.indexOf("Error") > -1;
         }
