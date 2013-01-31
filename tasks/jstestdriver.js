@@ -120,7 +120,7 @@ module.exports = function (grunt) {
                         onComplete(false);
                     } else {
 
-                        console.log(arg1);
+                        console.log(arg2);
 
                         onComplete();
                     }
