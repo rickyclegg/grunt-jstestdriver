@@ -130,7 +130,6 @@ module.exports = function (grunt) {
                     args: jarFile.concat(jarOptions)
                 }, function (error, result) {
                     if (error || !hasFailedTests(result)) {
-                        throwError(error.stderr);
                         onComplete(false);
                     } else {
                         onComplete();
