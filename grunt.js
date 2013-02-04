@@ -27,27 +27,20 @@ module.exports = function (grunt) {
             globals: {}
         },
         jstestdriver: {
-            browser: "/Applications/Firefox.app/Contents/MacOS/firefox",
-            browserTimeout: null,
-            captureConsole: null,
-            config: "task-test/jsTestDriver.conf",
-            dryRunFor: null,
-            help: null,
-            port: "9876",
-            preloadFiles: true,
-            requiredBrowsers: null,
-            reset: null,
-            server: null,
-            serverHandlerPrefix: null,
-            testOutput: null,
-            tests: "all",
-            plugins: null,
-            basePath: null,
-            runnerMode: null
+            start_and_run: {
+                browser: "/Applications/Firefox.app/Contents/MacOS/firefox"
+            },
+            run_tests: {},
+            options: {
+                port: "9876",
+                preloadFiles: true,
+                config: "task-test/jsTestDriver.conf",
+                tests: "all"
+            }
         },
         shell: {
             git_commit: {
-                command: "git commit -a -m 'Commiting from grunt'",
+                command: "git commit -a -m 'Committing from grunt'",
                 stdout: true,
                 failOnError: true
             }
@@ -60,6 +53,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Default task.
-    grunt.registerTask('default', 'lint jstestdriver shell:git_commit');
+    grunt.registerTask('default', 'lint jstestdriver:start_server');
 
 };
