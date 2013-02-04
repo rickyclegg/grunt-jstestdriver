@@ -6,7 +6,8 @@ Uniting testing using JS Test Driver.
 ## Getting Started
 Navigate your console to your project folder and run command: `npm install grunt-jstestdriver`
 
-This will download the plugin to your project folder. The terminal window may go a bit strange as it copies the jstestdriver.jar to a lib folder on your computer.
+This will download the plugin to your project folder.
+
 If you already have the jar file installed in ./lib/ then it will not download the file.
 
 Then add this line to your project's `grunt.js` gruntfile:
@@ -19,9 +20,13 @@ The gruntfile config options have three mandatory properties.
 
 ```javascript
 jstestdriver: {
-    browser: "/Applications/Firefox.app/Contents/MacOS/firefox",
-    port: "9876",
-    tests: "all"
+    start_and_run: {
+        browser: "/Applications/Firefox.app/Contents/MacOS/firefox",
+        port: "9876",
+        preloadFiles: true,
+        config: "task-test/jsTestDriver.conf",
+        tests: "all"
+    }
 }
 ```
 
@@ -48,25 +53,61 @@ test:
 
 
 ## Documentation
+This plugin is a multitask for grunt. It is 2 task options. 'start_and_run' and 'run_tests'.
 You can use pretty much all of the properties in the JSTD configuration.
 https://code.google.com/p/js-test-driver/wiki/CommandLineFlags
+
 In test verbose always breaks the when you run grunt as it throws warning from JsTestDriver which causes grunt to stop running.
 
 Example grunt.js
 
 ```javascript
 jstestdriver: {
-    browser: "/Applications/Safari.app/Contents/MacOS/safari",
-    port: "9876",
-    preloadFiles: "true",
-    tests: "all",
-    basePath: "../../"
+    start_and_run: {
+        browser: "/Applications/Safari.app/Contents/MacOS/safari"
+    },
+    run_tests: {},
+    options: {
+        port: "9876",
+        preloadFiles: true,
+        config: "task-test/jsTestDriver.conf",
+        tests: "all"
+    }
 }
 ```
 
 You must specify the full path to the browser on a Mac. As you can see in the example above this is a lot more than just: Applications/Safari
 
-The server starts and stops after each grunt run. If you run into any problems and you need to reset the server, point to your jstestdriver.jar and call with the --reset option.
+### start\_and\_run
+
+Start and run does a complete JS Test Driver run. It starts the server, opens the specified broswers, runs tests and stop the server and all processes.
+
+This sub-task is really good for nightly builds.
+
+In testing I have had trouble using this on a Mac. Safari has security options stopping Safari from opening and booting the browser connect page.
+
+It also restricts you from testing on IE as it is harder to boot the browser. From feedback I know people are using this on windows without problems.
+
+### run_tests
+
+Run tests is a great if you are on a Mac or for your Grunt watch task.
+
+You have to manually boot your server with the command below.
+
+```
+java -jar lib/jstestdriver.jar --config src-test/jsTestDriver.conf --port 9876 &
+```
+
+The '&' will allow you to keep writing more commands in the same terminal window.
+
+Connect all your browsers you wish to test on. Open each one and navigate to: http://localhost:9876
+
+Once you have connected you can use your 'run_tests' sub-task to keep running your tests on all browsers.
+This allows Mac users to connect to IE and then run their tests across all browsers.
+
+## Trouble shooting
+
+If you run into any problems and you need to reset the server, point to your jstestdriver.jar and call with the --reset option.
 Or you can close down your terminal window.
 
 ```javascript
@@ -81,6 +122,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
+* 2012/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
 * 2012/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.
 * 2012/01/2 - v1.0.1 - Updated to Apache License.
 * 2012/01/2 - v1.0.0 - First release version.
