@@ -122,6 +122,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
+* 2012/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
 * 2012/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
 * 2012/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.
 * 2012/01/2 - v1.0.1 - Updated to Apache License.
