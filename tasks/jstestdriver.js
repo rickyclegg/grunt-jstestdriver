@@ -8,141 +8,77 @@
 module.exports = function (grunt) {
     "use strict";
 
-    grunt.registerTask("jstestdriver", "Grunt task for uniting testing using JS Test Driver.", function () {
-        var OPTION_PROP_PREFIX = "--",
-            options,
-            path = require("path"),
-            done = this.async(),
-            errorCount = 0;
+    function getPathToJar() {
+        var path = require("path");
 
-        function log(msg) {
-            grunt.log.writeln(msg);
-        }
+        return path.join(__dirname, "../lib", "jstestdriver.jar");
+    }
 
-        function throwError(msg) {
-            errorCount += 1;
-            grunt.log.error(msg);
-        }
+    function hasFailedTests(result) {
+        var prop, resultStr = "";
 
-        function getPathToJar() {
-            return path.join(__dirname, "../lib", "jstestdriver.jar");
-        }
-
-        function doesValueExistInArray(arr, value) {
-            return arr.indexOf(value) !== -1;
-        }
-
-        function evalOptionsExistance(arr, value, errMsg) {
-            var valid = doesValueExistInArray(arr, OPTION_PROP_PREFIX + value);
-            if (!valid) {
-                log(errMsg);
+        for (prop in result) {
+            if (result.hasOwnProperty(prop)) {
+                resultStr += result[prop];
             }
-
-            return valid;
         }
 
-        function evalOptionsExistanceAndThrowError(arr, value, errMsg) {
-            var valid = doesValueExistInArray(arr, OPTION_PROP_PREFIX + value);
+        return resultStr.indexOf("Error:") > -1;
+    }
 
-            if (!valid) {
-                grunt.fail.errorCount += 1;
-                throwError(errMsg);
+    function isValidOptionsProperty(options, propertyName) {
+        return propertyName !== "length" && options[propertyName] !== undefined && options[propertyName] !== null;
+    }
+
+    function getOptionsArray(options) {
+        var names, name, i, l, arr = [];
+
+        names = Object.getOwnPropertyNames(options);
+        l = names.length;
+        for (i = 0; i < l; i += 1) {
+            name = names[i];
+
+            if (isValidOptionsProperty(options, name)) {
+                arr.push("--" + name);
+                arr.push(options[name]);
             }
-
-            return valid;
         }
 
-        function evalOptionsData(optionsArray) {
-            var portValid,
-                browserValid,
-                configValid,
-                testsValid;
+        arr.push('&');
 
-            if (optionsArray.length === 0) {
-                log("You have not specified any options. Add JsTestDriver to your grunt file.");
-            }
+        return arr;
+    }
 
-            configValid = evalOptionsExistance(optionsArray,
-                "config",
-                "You have not specified your own config file. JsTestDriver will use the default location.");
+    grunt.registerMultiTask("jstestdriver", "Grunt task for uniting testing using JS Test Driver.", function () {
+        var done = this.async(),
+            options = grunt.utils._.extend({},
+                grunt.config.get('jstestdriver').options,
+                this.data);
 
-            if (configValid) {
-                log("Specifying a config option means you can add server information in the file.");
+        grunt.helper(this.target, options, done);
+    });
+
+    grunt.registerHelper('start_server', function (options, done) {
+        grunt.helper('exec', getOptionsArray(options), done);
+    });
+
+    grunt.registerHelper('run_tests', function (options, done) {
+        grunt.helper('exec', ["--config", options.config, "--tests", options.tests], done);
+    });
+
+    grunt.registerHelper('exec', function (options, done) {
+        var jsTestDriver = grunt.utils.spawn({
+            cmd: 'java',
+            args: ["-jar", getPathToJar()].concat(options)
+        }, function (error, result) {
+            if (error || hasFailedTests(result)) {
+                done(false);
             } else {
-                evalOptionsExistanceAndThrowError(optionsArray,
-                    "tests",
-                    "No tests specified in JsTestDriver config in grunt.js");
+                done();
             }
+        });
 
-            portValid = evalOptionsExistanceAndThrowError(optionsArray,
-                "port",
-                "No port specified in JsTestDriver config in grunt.js");
-
-            testsValid = evalOptionsExistanceAndThrowError(optionsArray,
-                "tests",
-                "No tests specified in JsTestDriver config in grunt.js");
-
-            browserValid = evalOptionsExistanceAndThrowError(optionsArray,
-                "browser",
-                "No browser specified in JsTestDriver config in grunt.js");
-
-            return configValid || (portValid && browserValid && testsValid);
-        }
-
-        function getOptionsArray(options) {
-            var names, name, i, l, arr = [];
-
-            names = Object.getOwnPropertyNames(options);
-            l = names.length;
-            for (i = 0; i < l; i += 1) {
-                name = names[i];
-                if (options[name] !== undefined && options[name] !== null) {
-                    arr.push(OPTION_PROP_PREFIX + name);
-                    arr.push(options[name]);
-                }
-            }
-
-            return evalOptionsData(arr) ? arr : null;
-        }
-
-        function hasFailedTests(result) {
-            var prop, resultStr = "";
-
-            for (prop in result) {
-                if (result.hasOwnProperty(prop)) {
-                    resultStr += result[prop];
-                }
-            }
-
-            return resultStr.indexOf("Error:") > -1;
-        }
-
-        function run(options, onComplete) {
-            var jarFile = ["-jar", getPathToJar()],
-                jarOptions = getOptionsArray(options),
-                jsTestDriver;
-
-            if (jarOptions) {
-                jsTestDriver = grunt.utils.spawn({
-                    cmd: 'java',
-                    args: jarFile.concat(jarOptions)
-                }, function (error, result) {
-                    if (error || hasFailedTests(result)) {
-                        onComplete(false);
-                    } else {
-                        onComplete();
-                    }
-                });
-
-                jsTestDriver.stdout.pipe(process.stdout);
-                jsTestDriver.stderr.pipe(process.stderr);
-            } else {
-                onComplete(false);
-            }
-        }
-
-        options = grunt.config.get("jstestdriver");
-
-        run(options, done);
+        jsTestDriver.stdout.pipe(process.stdout);
+        jsTestDriver.stderr.pipe(process.stderr);
     });
 };
