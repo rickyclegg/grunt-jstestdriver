@@ -59,7 +59,10 @@ test:
 
 
 ## Documentation
+
 This plugin is a multitask for grunt. It has 2 task options. 'start_and_run' and 'run_tests'.
+If you do no specify a sub-task it will default to use 'run_tests' so you will need to start your own JS Test Driver server.
+
 You can use pretty much all of the properties in the JSTD configuration.
 https://code.google.com/p/js-test-driver/wiki/CommandLineFlags
 
@@ -130,7 +133,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
-* 2012/04/2 - v1.1.4 - Updated docs, handles when error if you try to run a sub-task that does not exist.
+* 2012/04/2 - v1.1.5 - Made start_and_run default if no task is specified.
 * 2012/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
 * 2012/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
 * 2012/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.
