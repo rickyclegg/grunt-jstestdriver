@@ -8,6 +8,8 @@
 module.exports = function (grunt) {
     "use strict";
 
+    var SUB_TASKS = ['start_and_run', 'run_tests'];
+
     function getPathToJar() {
         var path = require("path");
 
@@ -55,10 +57,14 @@ module.exports = function (grunt) {
                 grunt.config.get('jstestdriver').options,
                 this.data);
 
-        grunt.helper(this.target, options, done);
+        if (SUB_TASKS.indexOf(this.target) > -1) {
+            grunt.helper(this.target, options, done);
+        } else {
+            grunt.log.writeln('jstestdriver will not run as "' + this.target + '" is not a subtask of jstestdriver.');
+        }
     });
 
-    grunt.registerHelper('start_server', function (options, done) {
+    grunt.registerHelper('start_and_run', function (options, done) {
         grunt.helper('exec', getOptionsArray(options), done);
     });
 

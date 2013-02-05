@@ -16,12 +16,12 @@ Then add this line to your project's `grunt.js` gruntfile:
 grunt.loadNpmTasks('grunt-jstestdriver');
 ```
 
-The gruntfile config options have three mandatory properties.
+A basic config of jstestdriver is as follows.
 
 ```javascript
 jstestdriver: {
     start_and_run: {
-        browser: "/Applications/Firefox.app/Contents/MacOS/firefox",
+        browser: "/Applications/Safari.app/Contents/MacOS/safari",
         port: "9876",
         preloadFiles: true,
         config: "task-test/jsTestDriver.conf",
@@ -30,9 +30,15 @@ jstestdriver: {
 }
 ```
 
+Then you can add the task to your gruntfile.
+
+```javascript
+grunt.registerTask('default', 'jstestdriver:start_and_run');
+```
+
 In testing the plugin works a lot better if you specify your own config file.
 
-Here is my sample config file for this plugin.
+Here is my sample jstd config file for this plugin.
 
 ```
 server: http://localhost:9876
@@ -53,7 +59,7 @@ test:
 
 
 ## Documentation
-This plugin is a multitask for grunt. It is 2 task options. 'start_and_run' and 'run_tests'.
+This plugin is a multitask for grunt. It has 2 task options. 'start_and_run' and 'run_tests'.
 You can use pretty much all of the properties in the JSTD configuration.
 https://code.google.com/p/js-test-driver/wiki/CommandLineFlags
 
@@ -75,6 +81,8 @@ jstestdriver: {
     }
 }
 ```
+
+The options object is a way to specify defaults over both tasks. If you specify the same property in the sub-task it will overwrite the options object property.
 
 You must specify the full path to the browser on a Mac. As you can see in the example above this is a lot more than just: Applications/Safari
 
@@ -122,6 +130,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
+* 2012/04/2 - v1.1.4 - Updated docs, handles when error if you try to run a sub-task that does not exist.
 * 2012/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
 * 2012/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
 * 2012/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.

@@ -28,7 +28,7 @@ module.exports = function (grunt) {
         },
         jstestdriver: {
             start_and_run: {
-                browser: "/Applications/Firefox.app/Contents/MacOS/firefox"
+                browser: "/Applications/Firefox.app/Contents/MacOS/firefox",
             },
             run_tests: {},
             options: {
@@ -53,6 +53,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Default task.
-    grunt.registerTask('default', 'lint jstestdriver:start_server');
+    grunt.registerTask('default', 'lint jstestdriver:start_and_run');
 
 };
