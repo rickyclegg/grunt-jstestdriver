@@ -34,7 +34,7 @@ module.exports = function (grunt) {
             options: {
                 port: "9876",
                 preloadFiles: true,
-                config: "task-test/jsTestDriver.conf",
+                config: ["task-test/jsTestDriver_jstd.conf", "task-test/jsTestDriver_jas.conf"],
                 tests: "all"
             }
         },
@@ -53,6 +53,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-shell');
 
     // Default task.
-    grunt.registerTask('default', 'lint jstestdriver:start_and_run');
+    grunt.registerTask('default', 'lint jstestdriver:run_tests');
 
 };
