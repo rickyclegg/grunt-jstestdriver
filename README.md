@@ -89,6 +89,25 @@ The options object is a way to specify defaults over both tasks. If you specify 
 
 You must specify the full path to the browser on a Mac. As you can see in the example above this is a lot more than just: Applications/Safari
 
+### Multiple config files
+
+If like me you like to split your project into multiple .conf files for integration, behaviour and unit tests. Multiple config files are for you.
+
+The config option in either your sub-task or your global options can either be a [String](https://developer.mozilla.org/en/docs/JavaScript/Reference/Global_Objects/String) or an [Array](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Array).
+In the Array you can specify as many config files as you wish to run in the one task.
+
+```javascript
+jstestdriver: {
+    run_tests: {
+        config: ["task-test/jsTestDriver_unit.conf", "task-test/jsTestDriver_integration.conf"]
+    },
+    options: {
+        port: "9876",
+        tests: "all"
+    }
+}
+```
+
 ### start\_and\_run
 
 Start and run does a complete JS Test Driver run. It starts the server, opens the specified broswers, runs tests and stop the server and all processes.
@@ -133,6 +152,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
+* 2012/04/2 - v1.2.0 - Added ability to specify multiple configuration files.
 * 2012/04/2 - v1.1.5 - Made start_and_run default if no task is specified.
 * 2012/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
 * 2012/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
