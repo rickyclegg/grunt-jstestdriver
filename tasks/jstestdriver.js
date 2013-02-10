@@ -67,8 +67,6 @@ module.exports = function (grunt) {
             }
         }
 
-        arr.push('&');
-
         return arr;
     }
 
