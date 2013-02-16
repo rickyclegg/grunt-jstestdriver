@@ -52,12 +52,10 @@ module.exports = function (grunt) {
         }
     });
 
-    // Load local tasks.
     grunt.loadTasks('tasks');
 
     grunt.loadNpmTasks('grunt-shell');
-
-    // Default task.
+    
     grunt.registerTask('default', 'lint jstestdriver:run_tests');
 
 };
