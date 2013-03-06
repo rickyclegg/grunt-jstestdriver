@@ -1,5 +1,7 @@
 # grunt-jstestdriver
 
+**CURRENTLY ONLY WORKING ON v0.3 WILL UPDATE SOON**
+
 Uniting testing using JS Test Driver.
 
 
@@ -152,6 +154,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
+* 2012/06/2 - v1.2.2 - Updated readme.md.
 * 2012/06/2 - v1.2.1 - Removed an unneeded terminal command.
 * 2012/06/2 - v1.2.0 - Added ability to specify multiple configuration files.
 * 2012/04/2 - v1.1.5 - Made start_and_run default if no task is specified.
