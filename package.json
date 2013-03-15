@@ -1,39 +1,40 @@
 {
     "name": "grunt-jstestdriver",
     "description": "Grunt task for uniting testing using JS Test Driver.",
-    "version": "1.2.0",
+    "version": "0.1.0",
     "homepage": "https://github.com/rickyclegg/grunt-jstestdriver",
     "author": {
         "name": "Ricky Clegg",
         "email": "me@rickyclegg.com",
-        "url": "http://rickyclegg.com"
+        "url": "http://www.rickyclegg.com"
     },
     "repository": {
         "type": "git",
-        "url": "git://github.com/rickyclegg/grunt-jstestdriver.git"
+        "url": "https://github.com/rickyclegg/grunt-jstestdriver.git"
     },
     "bugs": {
         "url": "https://github.com/rickyclegg/grunt-jstestdriver/issues"
     },
     "licenses": [
         {
-            "type": "APACHE",
-            "url": "https://github.com/rickyclegg/grunt-jstestdriver/blob/master/LICENSE-APACHE"
+            "type": "MIT",
+            "url": "https://github.com/rickyclegg/grunt-jstestdriver/blob/master/LICENSE-MIT"
         }
     ],
-    "main": "grunt.js",
-    "bin": "bin/grunt-jstestdriver",
+    "main": "Gruntfile.js",
     "engines": {
-        "node": "*"
+        "node": ">= 0.8.0"
     },
     "scripts": {
         "test": "grunt test"
     },
     "devDependencies": {
-        "grunt": "~0.3.17",
-        "grunt-html": "~0.3.1"
+        "grunt-contrib-jshint": "~0.1.1",
+        "grunt": "~0.4.1"
     },
-    "readmeFilename": "README.md",
+    "peerDependencies": {
+        "grunt": "~0.4.0"
+    },
     "keywords": [
         "gruntplugin",
         "jstestdriver",
