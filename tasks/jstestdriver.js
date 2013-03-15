@@ -8,43 +8,100 @@
 
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-  // Please see the Grunt documentation for more information regarding task
-  // creation: http://gruntjs.com/creating-tasks
+    var path = require('path'),
+        fs = require('fs'),
+        childProcess = require('child_process');
 
-  grunt.registerMultiTask('jstestdriver', 'Your task description goes here.', function() {
-    // Merge task-specific and/or target-specific options with these defaults.
-    var options = this.options({
-      punctuation: '.',
-      separator: ', '
-    });
+    grunt.registerTask('jstestdriver', 'Grunt task for uniting testing using JS Test Driver.', function () {
 
-    // Iterate over all specified file groups.
-    this.files.forEach(function(f) {
-      // Concat specified files.
-      var src = f.src.filter(function(filepath) {
-        // Warn on and remove invalid source files (if nonull was set).
-        if (!grunt.file.exists(filepath)) {
-          grunt.log.warn('Source file "' + filepath + '" not found.');
-          return false;
-        } else {
-          return true;
+        var options = this.options({
+                port: '9876',
+                tests: 'all'
+            }),
+            done = this.async(),
+            config = grunt.config.get('jstestdriver');
+
+        grunt.verbose.writeflags(options, 'Options');
+
+        grunt.util.async.forEach(config.files, function (filename) {
+            grunt.log.writeln('Running file: ' + filename);
+
+            runJSTestDriver(filename, options);
+
+        }.bind(this), this.async());
+
+        function runJSTestDriver(configFileLocation, options) {
+
+            var cp;
+
+            function next() {
+                grunt.log.writeln('Tried to call next');
+            }
+
+            function getPathToJar() {
+                var path = require("path");
+
+                return path.join(__dirname, "../lib", "jstestdriver.jar");
+            }
+
+            function hasFailedTests(result) {
+                var prop, resultStr = "";
+
+                for (prop in result) {
+                    if (result.hasOwnProperty(prop)) {
+                        resultStr += result[prop];
+                    }
+                }
+
+                return resultStr.indexOf("Error:") > -1;
+            }
+
+            function stopAsTestsHaveFailed(error) {
+                grunt.log.writeln(error);
+                done(false);
+            }
+
+            function processed(error, result, code) {
+                if (error || hasFailedTests(result)) {
+                    stopAsTestsHaveFailed(result);
+                } else {
+                    grunt.log.writeln('Finished running file: ' + configFileLocation);
+                }
+
+                next();
+            }
+
+            function getOptionsArray(options) {
+                var names, name, i, l, arr = [];
+
+                names = Object.getOwnPropertyNames(options);
+                l = names.length;
+                for (i = 0; i < l; i += 1) {
+                    name = names[i];
+
+                    arr.push("--" + name);
+                    arr.push(options[name]);
+                }
+
+                arr.push('&');
+
+                return arr;
+            }
+
+            grunt.log.writeln('Run: ' + ["-jar", getPathToJar(), "--config", configFileLocation].concat(getOptionsArray(options)).join(''));
+
+            /*cp = grunt.util.spawn({
+                cmd: 'java',
+                args: ["-jar", getPathToJar(), "--config", configFileLocation].concat(getOptionsArray(options))
+            }, processed);*/
+
+            if (grunt.option('verbose')) {
+                cp.stdout.pipe(process.stdout);
+                cp.stderr.pipe(process.stderr);
+            }
         }
-      }).map(function(filepath) {
-        // Read file source.
-        return grunt.file.read(filepath);
-      }).join(grunt.util.normalizelf(options.separator));
-
-      // Handle options.
-      src += options.punctuation;
-
-      // Write the destination file.
-      grunt.file.write(f.dest, src);
-
-      // Print a success message.
-      grunt.log.writeln('File "' + f.dest + '" created.');
     });
-  });
 
 };

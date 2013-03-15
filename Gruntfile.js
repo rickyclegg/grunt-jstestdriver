@@ -8,6 +8,8 @@
 
 'use strict';
 
+var rickyIsCool = false;
+
 module.exports = function (grunt) {
 
     // Project configuration.
@@ -22,22 +24,10 @@ module.exports = function (grunt) {
         },
 
         jstestdriver: {
-            default_options: {
-                options: {
-                },
-                files: {
-                    'tmp/default_options': ['test/fixtures/testing', 'test/fixtures/123']
-                }
+            options: {
+                port: "9876"
             },
-            custom_options: {
-                options: {
-                    separator: ': ',
-                    punctuation: ' !!!'
-                },
-                files: {
-                    'tmp/custom_options': ['test/fixtures/testing', 'test/fixtures/123']
-                }
-            }
+            files: ["task-test/jsTestDriver_jstd.conf", "task-test/jsTestDriver_jas.conf"]
         }
     });
 
@@ -45,5 +35,5 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('default', ['jshint']);
+    grunt.registerTask('default', ['jstestdriver']);
 };
