@@ -3,11 +3,16 @@ module.exports = function (grunt) {
     // Project configuration.
     grunt.initConfig({
         lint: {
-            files: ['grunt.js', 'tasks/**/*.js']
+            files: ['tasks/**/*.js']
         },
         watch: {
-            files: '<config:lint.files>',
-            tasks: 'default'
+            scripts: {
+                files: ['tasks/*.js'],
+                tasks: ['lint', 'jstestdriver:run_tests'],
+                options: {
+                    interrupt: true
+                }
+            }
         },
         jshint: {
             options: {
@@ -47,12 +52,10 @@ module.exports = function (grunt) {
         }
     });
 
-    // Load local tasks.
     grunt.loadTasks('tasks');
 
     grunt.loadNpmTasks('grunt-shell');
-
-    // Default task.
+    
     grunt.registerTask('default', 'lint jstestdriver:run_tests');
 
 };
