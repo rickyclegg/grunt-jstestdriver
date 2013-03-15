@@ -154,6 +154,7 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
+* 2012/06/2 - v0.1.0 - Updating to Grunt v0.4, base plugin.
 * 2012/06/2 - v1.2.0 - Added ability to specify multiple configuration files.
 * 2012/04/2 - v1.1.5 - Made start_and_run default if no task is specified.
 * 2012/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
