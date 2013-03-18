@@ -5,11 +5,7 @@
  * Copyright (c) 2013 Ricky Clegg
  * Licensed under the MIT license.
  */
-
 'use strict';
-
-var rickyIsCool = false;
-
 module.exports = function (grunt) {
 
     // Project configuration.
@@ -24,9 +20,6 @@ module.exports = function (grunt) {
         },
 
         jstestdriver: {
-            options: {
-                port: "9876"
-            },
             files: ["task-test/jsTestDriver_jstd.conf", "task-test/jsTestDriver_jas.conf"]
         }
     });
@@ -35,5 +28,5 @@ module.exports = function (grunt) {
 
     grunt.loadNpmTasks('grunt-contrib-jshint');
 
-    grunt.registerTask('default', ['jstestdriver']);
+    grunt.registerTask('default', ['jstestdriver', 'jshint']);
 };

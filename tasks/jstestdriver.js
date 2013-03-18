@@ -5,45 +5,47 @@
  * Copyright (c) 2013 Ricky Clegg
  * Licensed under the MIT license.
  */
-
 'use strict';
-
 module.exports = function (grunt) {
 
-    var path = require('path'),
-        fs = require('fs'),
-        childProcess = require('child_process');
+    var INVALID_FLAGS = ['browser', 'config', 'dryRunFor', 'port', 'server', 'serverHandlerPrefix', 'canFail'];
 
     grunt.registerTask('jstestdriver', 'Grunt task for uniting testing using JS Test Driver.', function () {
 
         var options = this.options({
-                port: '9876',
-                tests: 'all'
+                tests: 'all',
+                canFail: false
             }),
+            config = grunt.config.get('jstestdriver'),
             done = this.async(),
-            config = grunt.config.get('jstestdriver');
+            numberOfConfigs,
+            numberOfPassedTests = 0,
+            numberOfFailedTests = 0,
+            failedTests = [];
 
         grunt.verbose.writeflags(options, 'Options');
 
-        grunt.util.async.forEach(config.files, function (filename) {
-            grunt.log.writeln('Running file: ' + filename);
-
-            runJSTestDriver(filename, options);
-
-        }.bind(this), this.async());
+        function taskComplete() {
+            if (!options.canFail && failedTests.length > 0) {
+                grunt.fail.fatal(failedTests.join('\n\n'));
+                done(false);
+            } else {
+                grunt.log.ok('Total Passed: ' +
+                    numberOfPassedTests + ', Fails: ' + numberOfFailedTests);
+                done();
+            }
+        }
 
         function runJSTestDriver(configFileLocation, options) {
-
             var cp;
 
-            function next() {
-                grunt.log.writeln('Tried to call next');
-            }
+            function setNumberOfPassesAndFails(result) {
+                var resultAsStr = result.toString();
 
-            function getPathToJar() {
-                var path = require("path");
-
-                return path.join(__dirname, "../lib", "jstestdriver.jar");
+                if (resultAsStr) {
+                    numberOfPassedTests += parseInt(result.toString().split('; ')[0].split('Passed: ')[1], 10);
+                    numberOfFailedTests += parseInt(result.toString().split('; ')[1].split('Fails: ')[1], 10);
+                }
             }
 
             function hasFailedTests(result) {
@@ -58,19 +60,27 @@ module.exports = function (grunt) {
                 return resultStr.indexOf("Error:") > -1;
             }
 
-            function stopAsTestsHaveFailed(error) {
-                grunt.log.writeln(error);
-                done(false);
+            function processCompleteTests() {
+                grunt.log.verbose.writeln('>> Finished running file: ' + configFileLocation);
+                grunt.log.verbose.writeln('');
+
+                numberOfConfigs -= 1;
+                if (numberOfConfigs === 0) {
+                    taskComplete();
+                }
             }
 
-            function processed(error, result, code) {
+            function processed(error, result) {
+                setNumberOfPassesAndFails(result);
+
                 if (error || hasFailedTests(result)) {
-                    stopAsTestsHaveFailed(result);
+                    failedTests.push(result);
+                    grunt.verbose.writeln('   ONE or MORE tests have failed in:');
                 } else {
-                    grunt.log.writeln('Finished running file: ' + configFileLocation);
+                    grunt.verbose.writeln(result);
                 }
 
-                next();
+                processCompleteTests();
             }
 
             function getOptionsArray(options) {
@@ -81,27 +91,43 @@ module.exports = function (grunt) {
                 for (i = 0; i < l; i += 1) {
                     name = names[i];
 
-                    arr.push("--" + name);
-                    arr.push(options[name]);
+                    if (INVALID_FLAGS.indexOf(name) === -1) {
+                        arr.push("--" + name);
+                        arr.push(options[name]);
+                    } else {
+                        if (name !== 'canFail') {
+                            grunt.verbose.writeln('WARNING - ' +
+                                name + ' is not a valid config for use with the grunt-jstestdriver!');
+                        }
+                    }
                 }
-
-                arr.push('&');
 
                 return arr;
             }
 
-            grunt.log.writeln('Run: ' + ["-jar", getPathToJar(), "--config", configFileLocation].concat(getOptionsArray(options)).join(''));
-
-            /*cp = grunt.util.spawn({
+            cp = grunt.util.spawn({
                 cmd: 'java',
-                args: ["-jar", getPathToJar(), "--config", configFileLocation].concat(getOptionsArray(options))
-            }, processed);*/
+                args: ["-jar",
+                       'lib/jstestdriver.jar',
+                       "--config",
+                       configFileLocation].concat(getOptionsArray(options))
+            }, processed);
 
             if (grunt.option('verbose')) {
                 cp.stdout.pipe(process.stdout);
                 cp.stderr.pipe(process.stderr);
             }
         }
+
+        if (typeof config.files === 'string') {
+            config.files = [config.files];
+        }
+
+        numberOfConfigs = config.files.length;
+
+        grunt.util.async.forEach(config.files, function (filename) {
+            runJSTestDriver(filename, options);
+        }.bind(this));
     });
 
 };

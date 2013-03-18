@@ -1,89 +1,147 @@
 # grunt-jstestdriver
 
-> Grunt task for uniting testing using JS Test Driver.
+Uniting testing using JS Test Driver.
 
 ## Getting Started
-This plugin requires Grunt `~0.4.0`
+Navigate your console to your project folder and run command:
 
-If you haven't used [Grunt](http://gruntjs.com/) before, be sure to check out the [Getting Started](http://gruntjs.com/getting-started) guide, as it explains how to create a [Gruntfile](http://gruntjs.com/sample-gruntfile) as well as install and use Grunt plugins. Once you're familiar with that process, you may install this plugin with this command:
-
-```shell
-npm install grunt-jstestdriver --save-dev
+```
+npm install grunt-jstestdriver
 ```
 
-One the plugin has been installed, it may be enabled inside your Gruntfile with this line of JavaScript:
+This will download the plugin to your project folder.
 
-```js
+Then add this line to your project's `Gruntfile.js':
+
+```javascript
 grunt.loadNpmTasks('grunt-jstestdriver');
 ```
 
-## The "jstestdriver" task
+A basic config of jstestdriver is as follows.
 
-### Overview
-In your project's Gruntfile, add a section named `jstestdriver` to the data object passed into `grunt.initConfig()`.
+```javascript
+jstestdriver: {
+    files: ["src-test/unit/jsTestDriver.conf", "src-test/integration/jsTestDriver.conf"]
+}
+```
 
-```js
-grunt.initConfig({
-  jstestdriver: {
+Then you can add the task to your gruntfile.
+
+```javascript
+grunt.registerTask('default', ['jstestdriver']);
+```
+
+Here is my sample jstd config file for this plugin.
+
+```
+server: http://localhost:9876
+
+basepath: ../
+
+load:
+    - src-test/lib/jasmine-1.3.1/lib/jasmine-1.3.1/jasmine.js
+    - src-test/lib/jasmine-adapter/src/JasmineAdapter.js
+
+test:
+    - src-test/jstestdriver_jstd.js
+```
+
+**Grunt Help**
+
+[Grunt](http://gruntjs.com/)
+
+[Getting started](http://gruntjs.com/getting-started)
+
+## Documentation
+
+####Example Gruntfile.js
+
+```javascript
+jstestdriver: {
     options: {
-      // Task-specific options go here.
+        canFail: true,
+        verbose: true
     },
-    your_target: {
-      // Target-specific file lists and/or options go here.
-    },
-  },
-})
+    files: ["task-test/jsTestDriver_jstd.conf", "task-test/jsTestDriver_jas.conf"
+}
 ```
 
-### Options
+#### files - Array / String
+The list of JSTD .conf files that you want to test.
 
-#### options.separator
-Type: `String`
-Default value: `',  '`
+#### options [optional] - Object
+Extra options you want to pass to JSTD.
 
-A string value that is used to do something with whatever.
+#### options.canFail [optional] - Boolean - Default = false
+grunt-jstestdriver specific. If true tests are allowed to fail with stopping all tasks.
 
-#### options.punctuation
-Type: `String`
-Default value: `'.'`
+You can use most of the command file flags in the options object.
+https://code.google.com/p/js-test-driver/wiki/CommandLineFlags
 
-A string value that is used to do something else with whatever else.
+The ones that you cannot use are:
 
-### Usage Examples
+* browser
+* config
+* dryRunFor
+* port
+* server
+* serverHandlerPrefix
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
+### Starting the server
 
-```js
-grunt.initConfig({
-  jstestdriver: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-})
+To run tests you must start your server. Navigate your command line to your project folder.
+
+```
+cd /User/Documents/MyApp
 ```
 
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+Then run the command below to start yourJSTD server.
 
-```js
-grunt.initConfig({
-  jstestdriver: {
-    options: {
-      separator: ': ',
-      punctuation: ' !!!',
-    },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-})
 ```
+java -jar lib/jstestdriver.jar --port 9876
+```
+
+You MUST leave the shell open to keep the server alive.
+
+Open all the browsers you wish to connect, and navigate them to:
+
+```
+http://localhost:9876/capture
+```
+
+You are now ready to run the tests.
+
+Open a new shell and navigate to your project again.
+
+You can then run your grunt task.
+
+## Trouble shooting
+
+If you run into any problems and you need to reset the server, point to your jstestdriver.jar and call with the --reset option.
+Or you can close down your terminal window.
+
+```javascript
+java -jar lib/jstestdriver.jar --reset
+```
+
+If you just want to test that the plugin is working.
 
 ## Contributing
-In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
+Let me now if you experience any bugs. I have not spent long on this plugin, but there was definitely a whole where people are only testing on Webkit.
+
 
 ## Release History
-_(Nothing yet)_
+* 2012/06/2 - v2.0.0 - Update to Grunt v0.4.
+* 2012/06/2 - v0.1.0 - Updating to Grunt v0.4, base plugin.
+* 2012/06/2 - v1.2.0 - Added ability to specify multiple configuration files.
+* 2012/04/2 - v1.1.5 - Made start_and_run default if no task is specified.
+* 2012/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
+* 2012/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
+* 2012/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.
+* 2012/01/2 - v1.0.1 - Updated to Apache License.
+* 2012/01/2 - v1.0.0 - First release version.
+
+
+## License
+Copyright (c) 2013 Ricky Clegg
+Licensed under the MIT license.
