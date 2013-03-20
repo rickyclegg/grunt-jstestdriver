@@ -122,6 +122,10 @@ module.exports = function (grunt) {
         if (typeof config.files === 'string') {
             config.files = [config.files];
         }
+        
+        if (options.testOutput) {
+            grunt.file.mkdir(options.testOutput);
+        }
 
         numberOfConfigs = config.files.length;
 
