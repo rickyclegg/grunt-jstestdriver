@@ -40,11 +40,15 @@ module.exports = function (grunt) {
             var cp;
 
             function setNumberOfPassesAndFails(result) {
-                var resultAsStr = result.toString();
+                var resultAsStr = result.toString(),
+                    passedReg = /\d(?=;\sFails)/,
+                    failsReg = /\d(?=;\sErrors)/;
 
-                if (resultAsStr) {
-                    numberOfPassedTests += parseInt(result.toString().split('; ')[0].split('Passed: ')[1], 10);
-                    numberOfFailedTests += parseInt(result.toString().split('; ')[1].split('Fails: ')[1], 10);
+                if (resultAsStr && resultAsStr.indexOf('RuntimeException') === -1) {
+                    numberOfPassedTests += parseInt(passedReg.exec(resultAsStr)[0], 10);
+                    numberOfFailedTests += parseInt(failsReg.exec(resultAsStr)[0], 10);
+                } else {
+                    grunt.fail.fatal('Did you start your server?\n' + resultAsStr);
                 }
             }
 
