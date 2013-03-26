@@ -108,7 +108,7 @@ module.exports = function (grunt) {
             cp = grunt.util.spawn({
                 cmd: 'java',
                 args: ["-jar",
-                       'lib/jstestdriver.jar',
+                       __dirname + '/../lib/jstestdriver.jar',
                        "--config",
                        configFileLocation].concat(getOptionsArray(options))
             }, processed);
