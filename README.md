@@ -98,7 +98,7 @@ cd /User/Documents/MyApp
 Then run the command below to start yourJSTD server.
 
 ```
-java -jar lib/jstestdriver.jar --port 9876
+java -jar node_modules/grunt-jstestdriver/lib/jstestdriver.jar --port 9876
 ```
 
 You MUST leave the shell open to keep the server alive.
@@ -131,15 +131,17 @@ Let me now if you experience any bugs. I have not spent long on this plugin, but
 
 
 ## Release History
-* 2012/18/3 - v2.0.0 - Update to Grunt v0.4.
-* 2012/13/2 - v1.3.0 - Updating to Grunt v0.4, base plugin.
-* 2012/06/2 - v1.2.0 - Added ability to specify multiple configuration files.
-* 2012/04/2 - v1.1.5 - Made start_and_run default if no task is specified.
-* 2012/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
-* 2012/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
-* 2012/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.
-* 2012/01/2 - v1.0.1 - Updated to Apache License.
-* 2012/01/2 - v1.0.0 - First release version.
+* 2013/18/3 - v2.2.0 - Updated API Docs.
+* 2013/18/3 - v2.1.0 - Bug fix for bad Jar location.
+* 2013/18/3 - v2.0.0 - Update to Grunt v0.4.
+* 2013/13/2 - v1.3.0 - Updating to Grunt v0.4, base plugin.
+* 2013/06/2 - v1.2.0 - Added ability to specify multiple configuration files.
+* 2013/04/2 - v1.1.5 - Made start_and_run default if no task is specified.
+* 2013/04/2 - v1.1.3 - Updated to remove the script for downloading jstestdriver.jar.
+* 2013/04/2 - v1.1.0 - Re-written to have multitasks and simplify usage.
+* 2013/01/2 - v1.0.2 - Bug fix. Grunt task not stopping if there are failing tests.
+* 2013/01/2 - v1.0.1 - Updated to Apache License.
+* 2013/01/2 - v1.0.0 - First release version.
 
 
 ## License
