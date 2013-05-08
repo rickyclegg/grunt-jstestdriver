@@ -18,9 +18,11 @@ module.exports = function (grunt) {
                 jshintrc: '.jshintrc'
             }
         },
-
         jstestdriver: {
-            files: ["task-test/jsTestDriver_jstd.conf", "task-test/jsTestDriver_jas.conf"]
+            options: {
+                canFail: false
+            },
+            files: ["task-test/jsTestDriver_jstd.conf"]
         }
     });
 
