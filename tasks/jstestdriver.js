@@ -41,8 +41,8 @@ module.exports = function (grunt) {
 
             function setNumberOfPassesAndFails(result) {
                 var resultAsStr = result.toString(),
-                    passedReg = /\d(?=;\sFails)/,
-                    failsReg = /\d(?=;\sErrors)/;
+                    passedReg = /\d+(?=;\sFails)/,
+                    failsReg = /\d+(?=;\sErrors)/;
 
                 if (resultAsStr && resultAsStr.indexOf('RuntimeException') === -1) {
                     numberOfPassedTests += parseInt(passedReg.exec(resultAsStr)[0], 10);
@@ -126,7 +126,7 @@ module.exports = function (grunt) {
         if (typeof config.files === 'string') {
             config.files = [config.files];
         }
-        
+
         if (options.testOutput) {
             grunt.file.mkdir(options.testOutput);
         }
