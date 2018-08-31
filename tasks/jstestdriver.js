@@ -18,7 +18,6 @@ module.exports = function (grunt) {
             }),
             config = grunt.config.get('jstestdriver'),
             done = this.async(),
-            numberOfConfigs,
             numberOfPassedTests = 0,
             numberOfFailedTests = 0,
             failedTests = [];
@@ -36,7 +35,7 @@ module.exports = function (grunt) {
             }
         }
 
-        function runJSTestDriver(configFileLocation, options) {
+        function runJSTestDriver(configFileLocation, options, processNext) {
             var cp;
 
             function setNumberOfPassesAndFails(result) {
@@ -68,10 +67,7 @@ module.exports = function (grunt) {
                 grunt.log.verbose.writeln('>> Finished running file: ' + configFileLocation);
                 grunt.log.verbose.writeln('');
 
-                numberOfConfigs -= 1;
-                if (numberOfConfigs === 0) {
-                    taskComplete();
-                }
+                processNext();
             }
 
             function processed(error, result) {
@@ -131,11 +127,9 @@ module.exports = function (grunt) {
             grunt.file.mkdir(options.testOutput);
         }
 
-        numberOfConfigs = config.files.length;
-
-        grunt.util.async.forEach(config.files, function (filename) {
-            runJSTestDriver(filename, options);
-        }.bind(this));
+        grunt.util.async.forEachSeries(config.files, function (filename, processNext) {
+            runJSTestDriver(filename, options, processNext);
+        }.bind(this), taskComplete);
     });
 
 };
