@@ -20,6 +20,7 @@ module.exports = function (grunt) {
             done = this.async(),
             numberOfPassedTests = 0,
             numberOfFailedTests = 0,
+            numberOfErrorTests = 0,
             failedTests = [];
 
         grunt.verbose.writeflags(options, 'Options');
@@ -30,7 +31,8 @@ module.exports = function (grunt) {
                 done(false);
             } else {
                 grunt.log.ok('Total Passed: ' +
-                    numberOfPassedTests + ', Fails: ' + numberOfFailedTests);
+                    numberOfPassedTests + ', Fails: ' + numberOfFailedTests +
+                    ', Errors: ' + numberOfErrorTests);
                 done();
             }
         }
@@ -39,13 +41,16 @@ module.exports = function (grunt) {
             var cp;
 
             function setNumberOfPassesAndFails(result) {
+                // The result string looks like this:
+                // Passed: 114; Fails: 0; Errors: 0
                 var resultAsStr = result.toString(),
-                    passedReg = /\d+(?=;\sFails)/,
-                    failsReg = /\d+(?=;\sErrors)/;
+                    resultReg = /Passed: (\d+); Fails: (\d+); Errors: (\d+)/,
+                    parsedResult = resultReg.exec(resultAsStr);
 
                 if (resultAsStr && resultAsStr.indexOf('RuntimeException') === -1) {
-                    numberOfPassedTests += parseInt(passedReg.exec(resultAsStr)[0], 10);
-                    numberOfFailedTests += parseInt(failsReg.exec(resultAsStr)[0], 10);
+                    numberOfPassedTests += parseInt(parsedResult[1], 10);
+                    numberOfFailedTests += parseInt(parsedResult[2], 10);
+                    numberOfErrorTests  += parseInt(parsedResult[3], 10);
                 } else {
                     grunt.fail.fatal('Did you start your server?\n' + resultAsStr);
                 }
